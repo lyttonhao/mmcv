@@ -55,6 +55,7 @@ def load_state_dict(module, state_dict, strict=False, logger=None):
     """
     unexpected_keys = []
     own_state = module.state_dict()
+    err_msg = []
     for name, param in state_dict.items():
         if name not in own_state:
             unexpected_keys.append(name)
@@ -66,14 +67,14 @@ def load_state_dict(module, state_dict, strict=False, logger=None):
         try:
             own_state[name].copy_(param)
         except Exception:
-            raise RuntimeError(
+            #raise RuntimeError(
+            err_msg.append(
                 'While copying the parameter named {}, '
                 'whose dimensions in the model are {} and '
                 'whose dimensions in the checkpoint are {}.'.format(
                     name, own_state[name].size(), param.size()))
     missing_keys = set(own_state.keys()) - set(state_dict.keys())
 
-    err_msg = []
     if unexpected_keys:
         err_msg.append('unexpected key in source state_dict: {}\n'.format(
             ', '.join(unexpected_keys)))

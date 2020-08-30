@@ -85,7 +85,8 @@ class TextLoggerHook(LoggerHook):
     def log(self, runner):
         log_dict = OrderedDict()
         # training mode if the output contains the key "time"
-        mode = 'train' if 'time' in runner.log_buffer.output else 'val'
+        # mode = 'train' if 'time' in runner.log_buffer.output else 'val'
+        mode = runner.mode
         log_dict['mode'] = mode
         log_dict['epoch'] = runner.epoch + 1
         log_dict['iter'] = runner.inner_iter + 1
